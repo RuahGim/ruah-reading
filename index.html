@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rua English Reading</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #4f46e5;
+      --accent-soft: #e0e7ff;
+      --border: #e5e7eb;
+      --shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans", Arial, sans-serif;
+      background: linear-gradient(180deg, #f9fbff 0%, #eef4ff 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+      color: #1e3a8a;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+    }
+
+    .control-row {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: end;
+    }
+
+    .field {
+      grid-column: span 12;
+    }
+
+    .field.small {
+      grid-column: span 4;
+    }
+
+    @media (max-width: 760px) {
+      .field.small {
+        grid-column: span 12;
+      }
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    select,
+    input[type="range"],
+    textarea {
+      width: 100%;
+    }
+
+    select,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      background: #fff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 320px;
+      resize: vertical;
+      line-height: 1.9;
+    }
+
+    .range-wrap {
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .range-value {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.08s ease, opacity 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      opacity: 0.96;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #eef2ff;
+      color: #312e81;
+    }
+
+    .ghost {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .reading-box {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+
+    .reading-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      color: #312e81;
+    }
+
+    .preview {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fcfdff;
+      font-size: 20px;
+      line-height: 2;
+      white-space: pre-wrap;
+      min-height: 220px;
+    }
+
+    .sentence {
+      padding: 2px 4px;
+      border-radius: 8px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .sentence.active {
+      background: var(--accent-soft);
+      color: #312e81;
+      font-weight: 800;
+    }
+
+    .hint {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 800;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>📚 Rua English Reading</h1>
+      <p>Bright, slow British-style reading practice for children</p>
+    </div>
+
+    <div class="card">
+      <div class="pill">Speech settings</div>
+      <div class="controls">
+        <div class="control-row">
+          <div class="field">
+            <label for="voiceSelect">Voice</label>
+            <select id="voiceSelect"></select>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <div class="field small">
+            <label for="rate">Speed</label>
+            <div class="range-wrap">
+              <input id="rate" type="range" min="0.6" max="1.2" step="0.05" value="0.8" />
+              <div class="range-value">Current: <span id="rateValue">0.80</span></div>
+            </div>
+          </div>
+
+          <div class="field small">
+            <label for="pitch">Pitch</label>
+            <div class="range-wrap">
+              <input id="pitch" type="range" min="0.8" max="1.4" step="0.05" value="1.1" />
+              <div class="range-value">Current: <span id="pitchValue">1.10</span></div>
+            </div>
+          </div>
+
+          <div class="field small">
+            <label for="volume">Volume</label>
+            <div class="range-wrap">
+              <input id="volume" type="range" min="0.2" max="1" step="0.05" value="1" />
+              <div class="range-value">Current: <span id="volumeValue">1.00</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="speakBtn">▶ Read Aloud</button>
+          <button class="secondary" id="pauseBtn">⏸ Pause</button>
+          <button class="secondary" id="resumeBtn">⏯ Resume</button>
+          <button class="ghost" id="stopBtn">⏹ Stop</button>
+        </div>
+
+        <div class="status" id="status">
+          Ready. Choose a British voice, then press “Read Aloud”.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pill">Reading text</div>
+      <label for="textInput">Text</label>
+      <textarea id="textInput">Our home moves with us!
+
+It's 2011. The Giffords have three children.
+Their names are Niall (9), Mairen (6), and Siobhan (4). The family's home has a roof, a door, and windows. It doesn't have a balcony, and their home isn't a house. Their home is a boat. It moves on water. The Giffords move with the boat - it takes them around the world.
+
+Downstairs, there's a living room and a small kitchen.
+There's a fridge and an oven.
+There's no space for a washing machine, so the Giffords wash their clothes in a bucket!
+
+The kids do boat-schooling at a big table. They use books, laptops, and the internet. There's no TV on the boat.
+
+There are three bedrooms. Niall has a bunk bed. He has a guitar.
+Mairen shares her room with her sister.
+
+The girls love Harry Potter movies. They watch them on the laptop on family movie nights.
+
+The kids have games and a lot of books on the shelf. They love reading, drawing, and writing.
+
+There are two bathrooms. The shower has cold water!
+
+For the Giffords, it's not important to have a hot shower. Family is important. Together, they travel in their boat. They learn about other countries. But it's also important to have friends. They meet up with friends on other boats.
+
+Now it's 2023. Niall and Mairen want to go to college. The kids' life on the boat is over, and a new life begins for them.</textarea>
+    </div>
+
+    <div class="card reading-box">
+      <h2 class="reading-title">Preview</h2>
+      <div class="preview" id="preview"></div>
+      <div class="hint">
+        Tip: In Edge, a British voice like <strong>en-GB</strong> often sounds best here.  
+        For children, speed around <strong>0.75 to 0.85</strong> is usually comfy.
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Save this as an HTML file and open it in Microsoft Edge.
+    </div>
+  </div>
+
+  <script>
+    const voiceSelect = document.getElementById("voiceSelect");
+    const rateInput = document.getElementById("rate");
+    const pitchInput = document.getElementById("pitch");
+    const volumeInput = document.getElementById("volume");
+
+    const rateValue = document.getElementById("rateValue");
+    const pitchValue = document.getElementById("pitchValue");
+    const volumeValue = document.getElementById("volumeValue");
+
+    const textInput = document.getElementById("textInput");
+    const preview = document.getElementById("preview");
+    const statusBox = document.getElementById("status");
+
+    const speakBtn = document.getElementById("speakBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const stopBtn = document.getElementById("stopBtn");
+
+    let voices = [];
+    let utterance = null;
+    let sentenceMeta = [];
+
+    function updateRangeLabels() {
+      rateValue.textContent = Number(rateInput.value).toFixed(2);
+      pitchValue.textContent = Number(pitchInput.value).toFixed(2);
+      volumeValue.textContent = Number(volumeInput.value).toFixed(2);
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function splitIntoSentences(text) {
+      const clean = text.replace(/\r/g, "").trim();
+      if (!clean) return [];
+
+      const regex = /[^.!?\n]+[.!?]?|\n+/g;
+      const raw = clean.match(regex) || [];
+      return raw
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    function renderPreview() {
+      const sentences = splitIntoSentences(textInput.value);
+      sentenceMeta = [];
+      preview.innerHTML = "";
+
+      let charCursor = 0;
+
+      sentences.forEach((sentence, index) => {
+        const span = document.createElement("span");
+        span.className = "sentence";
+        span.id = `sentence-${index}`;
+        span.textContent = sentence + " ";
+        preview.appendChild(span);
+
+        sentenceMeta.push({
+          index,
+          start: charCursor,
+          end: charCursor + sentence.length,
+          text: sentence
+        });
+
+        charCursor += sentence.length + 1;
+      });
+
+      if (sentences.length === 0) {
+        preview.textContent = "Type or paste your text here.";
+      }
+    }
+
+    function clearActiveSentence() {
+      document.querySelectorAll(".sentence.active").forEach(el => {
+        el.classList.remove("active");
+      });
+    }
+
+    function highlightByCharIndex(charIndex) {
+      clearActiveSentence();
+
+      const found = sentenceMeta.find(
+        s => charIndex >= s.start && charIndex <= s.end
+      );
+
+      if (found) {
+        const el = document.getElementById(`sentence-${found.index}`);
+        if (el) {
+          el.classList.add("active");
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    }
+
+    function preferredVoiceScore(voice) {
+      const name = (voice.name || "").toLowerCase();
+      const lang = (voice.lang || "").toLowerCase();
+
+      let score = 0;
+
+      if (lang.startsWith("en-gb")) score += 100;
+      if (name.includes("libby")) score += 20;
+      if (name.includes("sonia")) score += 20;
+      if (name.includes("female")) score += 10;
+      if (name.includes("zira")) score -= 10;
+      if (name.includes("male")) score -= 5;
+
+      return score;
+    }
+
+    function loadVoices() {
+      voices = window.speechSynthesis.getVoices().slice();
+
+      voices.sort((a, b) => preferredVoiceScore(b) - preferredVoiceScore(a));
+
+      voiceSelect.innerHTML = "";
+
+      if (!voices.length) {
+        const option = document.createElement("option");
+        option.textContent = "No voices found yet";
+        option.value = "";
+        voiceSelect.appendChild(option);
+        return;
+      }
+
+      voices.forEach((voice, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      const bestIndex = voices.findIndex(v => (v.lang || "").toLowerCase().startsWith("en-gb"));
+      voiceSelect.value = String(bestIndex >= 0 ? bestIndex : 0);
+
+      const picked = voices[voiceSelect.value];
+      if (picked) {
+        statusBox.textContent = `Ready. Selected voice: ${picked.name} (${picked.lang})`;
+      }
+    }
+
+    function speakText() {
+      const text = textInput.value.trim();
+      if (!text) {
+        statusBox.textContent = "Please add some text first.";
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      clearActiveSentence();
+
+      utterance = new SpeechSynthesisUtterance(text);
+
+      const selectedVoice = voices[Number(voiceSelect.value)];
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = "en-GB";
+      }
+
+      utterance.rate = Number(rateInput.value);
+      utterance.pitch = Number(pitchInput.value);
+      utterance.volume = Number(volumeInput.value);
+
+      utterance.onstart = () => {
+        statusBox.textContent = "Reading has started.";
+      };
+
+      utterance.onpause = () => {
+        statusBox.textContent = "Paused.";
+      };
+
+      utterance.onresume = () => {
+        statusBox.textContent = "Reading resumed.";
+      };
+
+      utterance.onend = () => {
+        clearActiveSentence();
+        statusBox.textContent = "Finished reading.";
+      };
+
+      utterance.onerror = (event) => {
+        clearActiveSentence();
+        statusBox.textContent = `Speech error: ${event.error || "unknown error"}`;
+      };
+
+      utterance.onboundary = (event) => {
+        if (typeof event.charIndex === "number") {
+          highlightByCharIndex(event.charIndex);
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function pauseSpeech() {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+      }
+    }
+
+    function resumeSpeech() {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    }
+
+    function stopSpeech() {
+      window.speechSynthesis.cancel();
+      clearActiveSentence();
+      statusBox.textContent = "Stopped.";
+    }
+
+    rateInput.addEventListener("input", updateRangeLabels);
+    pitchInput.addEventListener("input", updateRangeLabels);
+    volumeInput.addEventListener("input", updateRangeLabels);
+
+    textInput.addEventListener("input", renderPreview);
+
+    speakBtn.addEventListener("click", speakText);
+    pauseBtn.addEventListener("click", pauseSpeech);
+    resumeBtn.addEventListener("click", resumeSpeech);
+    stopBtn.addEventListener("click", stopSpeech);
+
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    updateRangeLabels();
+    renderPreview();
+    loadVoices();
+  </script>
+</body>
+</html>
