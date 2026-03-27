@@ -1,306 +1,441 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rua English Reading</title>
+  <title>루아의 영어책</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg: #f6f8fc;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --accent: #4f46e5;
-      --accent-soft: #e0e7ff;
-      --border: #e5e7eb;
-      --shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * {
-      box-sizing: border-box;
-    }
+```
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --border: #2e2c28;
+  --text: #e8e4dc;
+  --muted: #7a7368;
+  --accent: #c9a96e;
+  --accent-dim: #7a5f32;
+}
 
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "Noto Sans", Arial, sans-serif;
-      background: linear-gradient(180deg, #f9fbff 0%, #eef4ff 100%);
-      color: var(--text);
-      line-height: 1.7;
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif KR', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px 80px;
+}
 
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 32px 20px 48px;
-    }
+header {
+  text-align: center;
+  margin-bottom: 64px;
+  animation: fadeDown 0.8s ease both;
+}
+header .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+header .subtitle {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.divider {
+  width: 40px; height: 1px;
+  background: var(--accent-dim);
+  margin: 20px auto 0;
+}
 
-    .hero {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+.card {
+  width: 100%;
+  max-width: 680px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 32px;
+  animation: fadeUp 0.9s ease 0.1s both;
+}
 
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: clamp(28px, 5vw, 42px);
-      line-height: 1.15;
-      color: #1e3a8a;
-    }
+.label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
 
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 16px;
-    }
+.top-bar, .bottom-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.bottom-bar { margin-top: 16px; margin-bottom: 0; }
+.controls-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.controls-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.controls-nav {
+  justify-content: space-between;
+}
+.btn-nav {
+  flex: 1;
+  justify-content: center;
+  letter-spacing: 0.06em;
+  border-color: var(--accent-dim);
+  color: var(--text);
+}
+.btn-nav:hover:not(:disabled) {
+  background: rgba(201,169,110,0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-nav:disabled { opacity: 0.25; cursor: default; border-color: var(--border); color: var(--muted); }
+.book-row {
+  margin-bottom: 12px;
+}
+.voice-row-with-preview {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.voice-row-with-preview select { flex: 1; }
+.btn-preview {
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 9px 14px;
+  flex-shrink: 0;
+}
+.btn-preview.playing {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+select, .voice-select-inline {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  padding: 9px 32px 9px 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237a7368'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+select:focus, .voice-select-inline:focus { border-color: var(--accent-dim); }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 22px;
-      margin-bottom: 20px;
-    }
+textarea {
+  width: 100%;
+  min-height: 180px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 16px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+textarea::placeholder { color: var(--muted); }
+textarea:focus { border-color: var(--accent-dim); }
 
-    .controls {
-      display: grid;
-      gap: 14px;
-    }
+#sentenceDisplay {
+  display: none;
+  width: 100%;
+  min-height: 180px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 16px;
+  overflow-y: auto;
+}
+#sentenceDisplay .sentence {
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  transition: background 0.2s;
+}
+#sentenceDisplay .sentence:hover { background: rgba(201,169,110,0.08); }
+#sentenceDisplay .sentence.active {
+  background: rgba(201,169,110,0.18);
+  color: var(--accent);
+}
 
-    .control-row {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(12, 1fr);
-      align-items: end;
-    }
+.controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-    .field {
-      grid-column: span 12;
-    }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent); color: #0f0e0c; font-weight: 700; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:disabled { opacity: 0.4; cursor: default; }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--accent-dim); color: var(--text); }
+.btn-ghost:disabled { opacity: 0.3; cursor: default; }
+.btn-icon { padding: 10px 14px; font-size: 15px; }
 
-    .field.small {
-      grid-column: span 4;
-    }
+.speed-row {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.speed-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-speed-step {
+  padding: 6px 10px;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  transition: transform 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.3); }
+.speed-val { font-size: 12px; color: var(--accent); width: 34px; text-align: right; flex-shrink: 0; }
 
-    @media (max-width: 760px) {
-      .field.small {
-        grid-column: span 12;
-      }
-    }
+.progress-wrap {
+  margin-top: 14px;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.progress-wrap.visible { opacity: 1; }
+.progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s linear; }
 
-    label {
-      display: block;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #374151;
-    }
+.status-bar {
+  margin-top: 16px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.status-dot.speaking { background: var(--accent); animation: pulse 1.2s ease infinite; }
+.status-dot.paused  { background: var(--accent-dim); }
+.status-text { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+.sentence-counter { font-size: 11px; color: var(--accent-dim); margin-left: auto; letter-spacing: 0.05em; }
 
-    select,
-    input[type="range"],
-    textarea {
-      width: 100%;
-    }
+.warn { margin-top: 14px; font-size: 12px; color: #b05050; display: none; }
 
-    select,
-    textarea {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-size: 15px;
-      background: #fff;
-      color: var(--text);
-    }
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+```
 
-    textarea {
-      min-height: 320px;
-      resize: vertical;
-      line-height: 1.9;
-    }
-
-    .range-wrap {
-      background: #f9fafb;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 12px;
-    }
-
-    .range-value {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    button {
-      appearance: none;
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.08s ease, opacity 0.2s ease, background 0.2s ease;
-    }
-
-    button:hover {
-      opacity: 0.96;
-    }
-
-    button:active {
-      transform: translateY(1px);
-    }
-
-    .primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .secondary {
-      background: #eef2ff;
-      color: #312e81;
-    }
-
-    .ghost {
-      background: #f3f4f6;
-      color: #374151;
-    }
-
-    .status {
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      color: #334155;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .reading-box {
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-    }
-
-    .reading-title {
-      margin: 0 0 12px;
-      font-size: 20px;
-      color: #312e81;
-    }
-
-    .preview {
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      background: #fcfdff;
-      font-size: 20px;
-      line-height: 2;
-      white-space: pre-wrap;
-      min-height: 220px;
-    }
-
-    .sentence {
-      padding: 2px 4px;
-      border-radius: 8px;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .sentence.active {
-      background: var(--accent-soft);
-      color: #312e81;
-      font-weight: 800;
-    }
-
-    .hint {
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .footer-note {
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 16px;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #4338ca;
-      font-weight: 800;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <h1>📚 Rua English Reading</h1>
-      <p>Bright, slow British-style reading practice for children</p>
-    </div>
 
-    <div class="card">
-      <div class="pill">Speech settings</div>
-      <div class="controls">
-        <div class="control-row">
-          <div class="field">
-            <label for="voiceSelect">Voice</label>
-            <select id="voiceSelect"></select>
-          </div>
-        </div>
+  <header>
+    <p class="eyebrow">Ruah English Reading</p>
+    <h1>영어책 읽어주기</h1>
+    <p class="subtitle">텍스트를 입력하고 읽기 버튼을 누르세요</p>
+    <div class="divider"></div>
+  </header>
 
-        <div class="control-row">
-          <div class="field small">
-            <label for="rate">Speed</label>
-            <div class="range-wrap">
-              <input id="rate" type="range" min="0.6" max="1.2" step="0.05" value="0.8" />
-              <div class="range-value">Current: <span id="rateValue">0.80</span></div>
-            </div>
-          </div>
+  <div class="card">
 
-          <div class="field small">
-            <label for="pitch">Pitch</label>
-            <div class="range-wrap">
-              <input id="pitch" type="range" min="0.8" max="1.4" step="0.05" value="1.1" />
-              <div class="range-value">Current: <span id="pitchValue">1.10</span></div>
-            </div>
-          </div>
+```
+<!-- 상단: 목소리 선택 + 컨트롤 -->
+<div class="top-bar">
+  <div class="voice-row-with-preview">
+    <select id="voiceSelect" class="voice-select-inline"></select>
+    <button class="btn btn-ghost btn-preview" id="btnPreview" title="미리듣기">▶ 미리듣기</button>
+  </div>
+  <div class="controls-row">
+    <button class="btn btn-primary" id="btnSpeak">읽기</button>
+    <button class="btn btn-ghost" id="btnStop" disabled>정지</button>
+  </div>
+  <div class="controls-row controls-nav">
+    <button class="btn btn-ghost btn-nav" id="btnPrev" disabled>이전 문장</button>
+    <button class="btn btn-ghost" id="btnPause" disabled>일시정지</button>
+    <button class="btn btn-ghost btn-nav" id="btnNext" disabled>다음 문장</button>
+  </div>
+  <div class="speed-row">
+    <span class="speed-label">속도</span>
+    <button class="btn btn-ghost btn-speed-step" id="btnSpeedDown">－</button>
+    <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1" />
+    <button class="btn btn-ghost btn-speed-step" id="btnSpeedUp">＋</button>
+    <span class="speed-val" id="speedVal">1.0×</span>
+  </div>
+</div>
 
-          <div class="field small">
-            <label for="volume">Volume</label>
-            <div class="range-wrap">
-              <input id="volume" type="range" min="0.2" max="1" step="0.05" value="1" />
-              <div class="range-value">Current: <span id="volumeValue">1.00</span></div>
-            </div>
-          </div>
-        </div>
+<!-- 책 선택 -->
+<div class="book-row">
+  <select id="bookSelect" class="voice-select-inline">
+    <option value="">— 직접 입력 —</option>
+    <option value="1">1. Our home moves with us!</option>
+  </select>
+</div>
 
-        <div class="btns">
-          <button class="primary" id="speakBtn">▶ Read Aloud</button>
-          <button class="secondary" id="pauseBtn">⏸ Pause</button>
-          <button class="secondary" id="resumeBtn">⏯ Resume</button>
-          <button class="ghost" id="stopBtn">⏹ Stop</button>
-        </div>
+<!-- 텍스트 영역 -->
+<textarea id="textInput" placeholder="여기에 읽어줄 텍스트를 입력하세요…"></textarea>
+<div id="sentenceDisplay"></div>
 
-        <div class="status" id="status">
-          Ready. Choose a British voice, then press “Read Aloud”.
-        </div>
-      </div>
-    </div>
+<div class="bottom-bar">
+  <div class="voice-row-with-preview">
+    <select id="voiceSelectBottom" class="voice-select-inline"></select>
+    <button class="btn btn-ghost btn-preview" id="btnPreview2" title="미리듣기">▶ 미리듣기</button>
+  </div>
+  <div class="controls-row">
+    <button class="btn btn-primary" id="btnSpeak2">읽기</button>
+    <button class="btn btn-ghost" id="btnStop2" disabled>정지</button>
+  </div>
+  <div class="controls-row controls-nav">
+    <button class="btn btn-ghost btn-nav" id="btnPrev2" disabled>이전 문장</button>
+    <button class="btn btn-ghost" id="btnPause2" disabled>일시정지</button>
+    <button class="btn btn-ghost btn-nav" id="btnNext2" disabled>다음 문장</button>
+  </div>
+  <!-- 하단 속도 -->
+  <div class="speed-row">
+    <span class="speed-label">속도</span>
+    <button class="btn btn-ghost btn-speed-step" id="btnSpeedDown2">－</button>
+    <input type="range" id="speedRange2" min="0.5" max="2" step="0.1" value="1" />
+    <button class="btn btn-ghost btn-speed-step" id="btnSpeedUp2">＋</button>
+    <span class="speed-val" id="speedVal2">1.0×</span>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="pill">Reading text</div>
-      <label for="textInput">Text</label>
-      <textarea id="textInput">Our home moves with us!
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <span class="status-text" id="statusText">대기 중</span>
+  <span class="sentence-counter" id="sentenceCounter"></span>
+</div>
+
+<p class="warn" id="warnMsg">⚠ 이 브라우저는 음성 합성을 지원하지 않습니다.</p>
+```
+
+  </div>
+
+  <script>
+    const synth = window.speechSynthesis;
+    const btnSpeak    = document.getElementById('btnSpeak');
+    const btnSpeak2   = document.getElementById('btnSpeak2');
+    const btnPause    = document.getElementById('btnPause');
+    const btnPause2   = document.getElementById('btnPause2');
+    const btnStop     = document.getElementById('btnStop');
+    const btnStop2    = document.getElementById('btnStop2');
+    const btnPrev     = document.getElementById('btnPrev');
+    const btnPrev2    = document.getElementById('btnPrev2');
+    const btnNext     = document.getElementById('btnNext');
+    const btnNext2    = document.getElementById('btnNext2');
+    const textInput   = document.getElementById('textInput');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const voiceSelectBottom = document.getElementById('voiceSelectBottom');
+    const speedRange  = document.getElementById('speedRange');
+    const speedVal    = document.getElementById('speedVal');
+    const statusDot   = document.getElementById('statusDot');
+    const statusText  = document.getElementById('statusText');
+    const progressWrap      = document.getElementById('progressWrap');
+    const progressBar       = document.getElementById('progressBar');
+    const sentenceDisplay   = document.getElementById('sentenceDisplay');
+    const sentenceCounter   = document.getElementById('sentenceCounter');
+    const warnMsg     = document.getElementById('warnMsg');
+
+    if (!synth) { warnMsg.style.display = 'block'; btnSpeak.disabled = true; }
+
+    // ── 책 목록 ──
+    const BOOKS = {
+      '1': {
+        title: 'Our home moves with us!',
+        text: `Our home moves with us!
 
 It's 2011. The Giffords have three children.
 Their names are Niall (9), Mairen (6), and Siobhan (4). The family's home has a roof, a door, and windows. It doesn't have a balcony, and their home isn't a house. Their home is a boat. It moves on water. The Giffords move with the boat - it takes them around the world.
@@ -322,259 +457,291 @@ There are two bathrooms. The shower has cold water!
 
 For the Giffords, it's not important to have a hot shower. Family is important. Together, they travel in their boat. They learn about other countries. But it's also important to have friends. They meet up with friends on other boats.
 
-Now it's 2023. Niall and Mairen want to go to college. The kids' life on the boat is over, and a new life begins for them.</textarea>
-    </div>
-
-    <div class="card reading-box">
-      <h2 class="reading-title">Preview</h2>
-      <div class="preview" id="preview"></div>
-      <div class="hint">
-        Tip: In Edge, a British voice like <strong>en-GB</strong> often sounds best here.  
-        For children, speed around <strong>0.75 to 0.85</strong> is usually comfy.
-      </div>
-    </div>
-
-    <div class="footer-note">
-      Save this as an HTML file and open it in Microsoft Edge.
-    </div>
-  </div>
-
-  <script>
-    const voiceSelect = document.getElementById("voiceSelect");
-    const rateInput = document.getElementById("rate");
-    const pitchInput = document.getElementById("pitch");
-    const volumeInput = document.getElementById("volume");
-
-    const rateValue = document.getElementById("rateValue");
-    const pitchValue = document.getElementById("pitchValue");
-    const volumeValue = document.getElementById("volumeValue");
-
-    const textInput = document.getElementById("textInput");
-    const preview = document.getElementById("preview");
-    const statusBox = document.getElementById("status");
-
-    const speakBtn = document.getElementById("speakBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const resumeBtn = document.getElementById("resumeBtn");
-    const stopBtn = document.getElementById("stopBtn");
-
-    let voices = [];
-    let utterance = null;
-    let sentenceMeta = [];
-
-    function updateRangeLabels() {
-      rateValue.textContent = Number(rateInput.value).toFixed(2);
-      pitchValue.textContent = Number(pitchInput.value).toFixed(2);
-      volumeValue.textContent = Number(volumeInput.value).toFixed(2);
-    }
-
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function splitIntoSentences(text) {
-      const clean = text.replace(/\r/g, "").trim();
-      if (!clean) return [];
-
-      const regex = /[^.!?\n]+[.!?]?|\n+/g;
-      const raw = clean.match(regex) || [];
-      return raw
-        .map(s => s.trim())
-        .filter(Boolean);
-    }
-
-    function renderPreview() {
-      const sentences = splitIntoSentences(textInput.value);
-      sentenceMeta = [];
-      preview.innerHTML = "";
-
-      let charCursor = 0;
-
-      sentences.forEach((sentence, index) => {
-        const span = document.createElement("span");
-        span.className = "sentence";
-        span.id = `sentence-${index}`;
-        span.textContent = sentence + " ";
-        preview.appendChild(span);
-
-        sentenceMeta.push({
-          index,
-          start: charCursor,
-          end: charCursor + sentence.length,
-          text: sentence
-        });
-
-        charCursor += sentence.length + 1;
-      });
-
-      if (sentences.length === 0) {
-        preview.textContent = "Type or paste your text here.";
+Now it's 2023. Niall and Mairen want to go to college. The kids' life on the boat is over, and a new life begins for them.`
       }
-    }
+    };
 
-    function clearActiveSentence() {
-      document.querySelectorAll(".sentence.active").forEach(el => {
-        el.classList.remove("active");
-      });
-    }
-
-    function highlightByCharIndex(charIndex) {
-      clearActiveSentence();
-
-      const found = sentenceMeta.find(
-        s => charIndex >= s.start && charIndex <= s.end
-      );
-
-      if (found) {
-        const el = document.getElementById(`sentence-${found.index}`);
-        if (el) {
-          el.classList.add("active");
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+    const bookSelect = document.getElementById('bookSelect');
+    bookSelect.addEventListener('change', () => {
+      const key = bookSelect.value;
+      if (!key) {
+        textInput.value = '';
+        textInput.placeholder = '여기에 읽어줄 텍스트를 입력하세요…';
+        textInput.readOnly = false;
+      } else {
+        textInput.value = BOOKS[key].text;
+        textInput.readOnly = false;
       }
-    }
+    });
 
-    function preferredVoiceScore(voice) {
-      const name = (voice.name || "").toLowerCase();
-      const lang = (voice.lang || "").toLowerCase();
-
-      let score = 0;
-
-      if (lang.startsWith("en-gb")) score += 100;
-      if (name.includes("libby")) score += 20;
-      if (name.includes("sonia")) score += 20;
-      if (name.includes("female")) score += 10;
-      if (name.includes("zira")) score -= 10;
-      if (name.includes("male")) score -= 5;
-
-      return score;
-    }
+        // ── 목소리 로드 ──
+    let voiceList = [];
 
     function loadVoices() {
-      voices = window.speechSynthesis.getVoices().slice();
+      const all = synth.getVoices();
+      if (all.length === 0) return;
 
-      voices.sort((a, b) => preferredVoiceScore(b) - preferredVoiceScore(a));
-
-      voiceSelect.innerHTML = "";
-
-      if (!voices.length) {
-        const option = document.createElement("option");
-        option.textContent = "No voices found yet";
-        option.value = "";
-        voiceSelect.appendChild(option);
+      // 영어만 필터, 브라우저 기본 순서 유지
+      voiceList = all.filter(v => v.lang.startsWith('en'));
+      if (voiceList.length === 0) {
+        voiceSelect.innerHTML = '<option>영어 목소리를 찾을 수 없습니다</option>';
         return;
       }
 
-      voices.forEach((voice, index) => {
-        const option = document.createElement("option");
-        option.value = String(index);
-        option.textContent = `${voice.name} (${voice.lang})`;
-        voiceSelect.appendChild(option);
+      voiceSelect.innerHTML = '';
+      voiceList.forEach((v, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(opt);
       });
+      voiceSelect.value = 0;
+      // 하단 select 동기화
+      voiceSelectBottom.innerHTML = voiceSelect.innerHTML;
+      voiceSelectBottom.value = 0;
+    }
+    loadVoices();
+    if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
 
-      const bestIndex = voices.findIndex(v => (v.lang || "").toLowerCase().startsWith("en-gb"));
-      voiceSelect.value = String(bestIndex >= 0 ? bestIndex : 0);
 
-      const picked = voices[voiceSelect.value];
-      if (picked) {
-        statusBox.textContent = `Ready. Selected voice: ${picked.name} (${picked.lang})`;
-      }
+
+    // ── 문장 분리 ──
+    let sentences = [];
+    let currentIdx = 0;
+    let isPlaying = false;
+    let paused = false;
+    let progressInterval = null;
+
+    function splitSentences(text) {
+      // Mr./Dr. 등 축약어에서 끊기지 않도록 보호
+      const abbr = text.replace(/\b(Mr|Mrs|Ms|Dr|Prof|Sr|Jr|vs|etc|St|Ave)\./gi,
+        m => m.slice(0,-1) + '\x01');
+      const raw = abbr.match(/[^.!?]+[.!?]+/g) || [abbr];
+      return raw.map(s => s.replace(/\x01/g, '.').trim()).filter(s => s.length > 2);
     }
 
-    function speakText() {
+    function renderSentences() {
+      sentenceDisplay.innerHTML = '';
+      sentences.forEach((s, i) => {
+        const span = document.createElement('span');
+        span.className = 'sentence' + (i === currentIdx ? ' active' : '');
+        span.textContent = s + ' ';
+        span.addEventListener('click', () => {
+          if (isPlaying) { paused = false; btnPause.textContent = '일시정지'; playFrom(i); }
+        });
+        sentenceDisplay.appendChild(span);
+      });
+      updateCounter();
+    }
+
+    function highlightSentence(idx) {
+      document.querySelectorAll('#sentenceDisplay .sentence').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      const active = sentenceDisplay.querySelector('.sentence.active');
+      if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      updateCounter();
+    }
+
+    function updateCounter() {
+      sentenceCounter.textContent = sentences.length > 0
+        ? `${currentIdx + 1} / ${sentences.length}` : '';
+    }
+
+    // ── 재생 ──
+    function playFrom(idx) {
+      // cancel 없이 바로 speak — cancel 후 즉시 speak하면 일부 브라우저에서 onend 안 불림
+      if (idx >= sentences.length) { endAll(); return; }
+      currentIdx = idx;
+      highlightSentence(currentIdx);
+
+      const utt = new SpeechSynthesisUtterance(sentences[currentIdx]);
+      utt.rate = parseFloat(speedRange.value);
+      const voice = voiceList[parseInt(voiceSelect.value)];
+      if (voice) { utt.voice = voice; utt.lang = voice.lang; }
+      else { utt.lang = 'en-GB'; }
+
+      utt.onstart = () => {
+        setStatus('speaking');
+        isPlaying = true;
+        paused = false;
+        setButtonState(true);
+        startProgress();
+      };
+      // onend: 다음 문장으로 — 300ms 쉬고 진행 (자연스러운 문장 간 휴지)
+      utt.onend = () => {
+        if (!paused && isPlaying) setTimeout(() => playFrom(currentIdx + 1), 350);
+      };
+      utt.onerror = (e) => { if (e.error !== 'interrupted' && e.error !== 'canceled') endAll(); };
+
+      synth.speak(utt);
+    }
+
+    function endAll() {
+      synth.cancel();
+      isPlaying = false;
+      paused = false;
+      setStatus('');
+      setButtonState(false);
+      btnPause.textContent = '일시정지';
+      btnPause2.textContent = '일시정지';
+      endProgress();
+      sentenceDisplay.style.display = 'none';
+      textInput.style.display = 'block';
+      sentences = [];
+      sentenceCounter.textContent = '';
+    }
+
+    // ── 버튼 ──
+    function setButtonState(playing) {
+      btnSpeak.disabled  = playing; btnSpeak2.disabled  = playing;
+      btnPause.disabled  = !playing; btnPause2.disabled  = !playing;
+      btnStop.disabled   = !playing; btnStop2.disabled   = !playing;
+      btnPrev.disabled   = !playing; btnPrev2.disabled   = !playing;
+      btnNext.disabled   = !playing; btnNext2.disabled   = !playing;
+    }
+
+    btnSpeak.addEventListener('click', () => {
       const text = textInput.value.trim();
-      if (!text) {
-        statusBox.textContent = "Please add some text first.";
+      if (!text) return;
+      sentences = splitSentences(text);
+      currentIdx = 0;
+      textInput.style.display = 'none';
+      sentenceDisplay.style.display = 'block';
+      renderSentences();
+      playFrom(0);
+    });
+
+    btnPause.addEventListener('click', () => {
+      if (!paused) {
+        synth.pause(); paused = true;
+        setStatus('paused');
+        btnPause.textContent = '계속'; btnPause2.textContent = '계속';
+        clearInterval(progressInterval);
+      } else {
+        synth.resume(); paused = false;
+        setStatus('speaking');
+        btnPause.textContent = '일시정지'; btnPause2.textContent = '일시정지';
+        startProgress();
+      }
+    });
+
+    btnStop.addEventListener('click', () => endAll());
+
+    btnPrev.addEventListener('click', () => {
+      paused = false; btnPause.textContent = '일시정지';
+      playFrom(Math.max(0, currentIdx - 1));
+    });
+
+    btnNext.addEventListener('click', () => {
+      paused = false; btnPause.textContent = '일시정지';
+      const next = currentIdx + 1;
+      if (next >= sentences.length) { endAll(); return; }
+      playFrom(next);
+    });
+
+    // 하단 버튼 — 상단과 동일한 동작
+    btnSpeak2.addEventListener('click', () => btnSpeak.click());
+    btnPause2.addEventListener('click', () => {
+      btnPause.click();
+      btnPause2.textContent = btnPause.textContent;
+    });
+    btnStop2.addEventListener('click',  () => btnStop.click());
+    btnPrev2.addEventListener('click',  () => btnPrev.click());
+    btnNext2.addEventListener('click',  () => btnNext.click());
+
+    // ── 미리듣기 ──
+    const PREVIEW_TEXT = "The quick brown fox jumps over the lazy dog. Hello, how are you today?";
+    let previewUtt = null;
+
+    function previewVoice(btn) {
+      // 재생 중이면 정지
+      if (btn.classList.contains('playing')) {
+        synth.cancel();
+        btn.classList.remove('playing');
+        btn.textContent = '▶ 미리듣기';
+        btnPreview.classList.remove('playing');  btnPreview.textContent = '▶ 미리듣기';
+        btnPreview2.classList.remove('playing'); btnPreview2.textContent = '▶ 미리듣기';
         return;
       }
+      // 본 재생 중이면 미리듣기 안 됨
+      if (isPlaying) return;
 
-      window.speechSynthesis.cancel();
-      clearActiveSentence();
+      synth.cancel();
+      const voice = voiceList[parseInt(voiceSelect.value)];
+      previewUtt = new SpeechSynthesisUtterance(PREVIEW_TEXT);
+      previewUtt.rate = parseFloat(speedRange.value);
+      if (voice) { previewUtt.voice = voice; previewUtt.lang = voice.lang; }
+      else { previewUtt.lang = 'en-GB'; }
 
-      utterance = new SpeechSynthesisUtterance(text);
-
-      const selectedVoice = voices[Number(voiceSelect.value)];
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-        utterance.lang = selectedVoice.lang;
-      } else {
-        utterance.lang = "en-GB";
-      }
-
-      utterance.rate = Number(rateInput.value);
-      utterance.pitch = Number(pitchInput.value);
-      utterance.volume = Number(volumeInput.value);
-
-      utterance.onstart = () => {
-        statusBox.textContent = "Reading has started.";
+      previewUtt.onstart = () => {
+        btnPreview.classList.add('playing');  btnPreview.textContent = '■ 정지';
+        btnPreview2.classList.add('playing'); btnPreview2.textContent = '■ 정지';
       };
-
-      utterance.onpause = () => {
-        statusBox.textContent = "Paused.";
+      previewUtt.onend = previewUtt.onerror = () => {
+        btnPreview.classList.remove('playing');  btnPreview.textContent = '▶ 미리듣기';
+        btnPreview2.classList.remove('playing'); btnPreview2.textContent = '▶ 미리듣기';
       };
-
-      utterance.onresume = () => {
-        statusBox.textContent = "Reading resumed.";
-      };
-
-      utterance.onend = () => {
-        clearActiveSentence();
-        statusBox.textContent = "Finished reading.";
-      };
-
-      utterance.onerror = (event) => {
-        clearActiveSentence();
-        statusBox.textContent = `Speech error: ${event.error || "unknown error"}`;
-      };
-
-      utterance.onboundary = (event) => {
-        if (typeof event.charIndex === "number") {
-          highlightByCharIndex(event.charIndex);
-        }
-      };
-
-      window.speechSynthesis.speak(utterance);
+      synth.speak(previewUtt);
     }
 
-    function pauseSpeech() {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause();
-      }
+    const btnPreview  = document.getElementById('btnPreview');
+    const btnPreview2 = document.getElementById('btnPreview2');
+    btnPreview.addEventListener('click',  () => previewVoice(btnPreview));
+    btnPreview2.addEventListener('click', () => previewVoice(btnPreview2));
+
+    // 목소리 바뀌면 미리듣기 자동 재생
+    voiceSelect.addEventListener('change', () => {
+      voiceSelectBottom.value = voiceSelect.value;
+      previewVoice(btnPreview);
+    });
+    voiceSelectBottom.addEventListener('change', () => {
+      voiceSelect.value = voiceSelectBottom.value;
+      previewVoice(btnPreview2);
+    });
+
+    const speedRange2  = document.getElementById('speedRange2');
+    const speedVal2    = document.getElementById('speedVal2');
+    const btnSpeedUp   = document.getElementById('btnSpeedUp');
+    const btnSpeedDown = document.getElementById('btnSpeedDown');
+    const btnSpeedUp2  = document.getElementById('btnSpeedUp2');
+    const btnSpeedDown2= document.getElementById('btnSpeedDown2');
+
+    function setSpeed(val) {
+      const v = Math.min(2, Math.max(0.5, Math.round(val * 10) / 10));
+      speedRange.value  = v;
+      speedRange2.value = v;
+      speedVal.textContent  = v.toFixed(1) + '×';
+      speedVal2.textContent = v.toFixed(1) + '×';
     }
 
-    function resumeSpeech() {
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-      }
+    speedRange.addEventListener('input', () => setSpeed(parseFloat(speedRange.value)));
+    speedRange2.addEventListener('input', () => setSpeed(parseFloat(speedRange2.value)));
+
+    btnSpeedUp.addEventListener('click',    () => setSpeed(parseFloat(speedRange.value) + 0.1));
+    btnSpeedDown.addEventListener('click',  () => setSpeed(parseFloat(speedRange.value) - 0.1));
+    btnSpeedUp2.addEventListener('click',   () => setSpeed(parseFloat(speedRange.value) + 0.1));
+    btnSpeedDown2.addEventListener('click', () => setSpeed(parseFloat(speedRange.value) - 0.1));
+
+    // ── 상태/진행 ──
+    function setStatus(state) {
+      statusDot.className = 'status-dot ' + (state || '');
+      const labels = { speaking: '읽는 중…', paused: '일시정지됨', '': '대기 중' };
+      statusText.textContent = labels[state] ?? '대기 중';
     }
-
-    function stopSpeech() {
-      window.speechSynthesis.cancel();
-      clearActiveSentence();
-      statusBox.textContent = "Stopped.";
+    function startProgress() {
+      progressWrap.classList.add('visible');
+      progressBar.style.width = '0%';
+      let p = 0;
+      clearInterval(progressInterval);
+      progressInterval = setInterval(() => { p += 0.5; if (p > 98) p = 98; progressBar.style.width = p + '%'; }, 100);
     }
-
-    rateInput.addEventListener("input", updateRangeLabels);
-    pitchInput.addEventListener("input", updateRangeLabels);
-    volumeInput.addEventListener("input", updateRangeLabels);
-
-    textInput.addEventListener("input", renderPreview);
-
-    speakBtn.addEventListener("click", speakText);
-    pauseBtn.addEventListener("click", pauseSpeech);
-    resumeBtn.addEventListener("click", resumeSpeech);
-    stopBtn.addEventListener("click", stopSpeech);
-
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-
-    updateRangeLabels();
-    renderPreview();
-    loadVoices();
+    function endProgress() {
+      clearInterval(progressInterval);
+      progressBar.style.width = '100%';
+      setTimeout(() => { progressWrap.classList.remove('visible'); progressBar.style.width = '0%'; }, 400);
+    }
   </script>
+
 </body>
 </html>
